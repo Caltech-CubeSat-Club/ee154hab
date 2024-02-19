@@ -1,0 +1,1 @@
+Warning 1: Layer name '2024-02-18_test' adjusted to '2024_02_18_test' for XML validity.
