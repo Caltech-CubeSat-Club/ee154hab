@@ -32,7 +32,6 @@ void setup() {
   pinMode(3,OUTPUT); // Extra light (GPS fix indicator? would need to add jumper between FIX pin and this pin)
   pinMode(4,OUTPUT); // Extra light
   pinMode(5,OUTPUT); // Extra light
-  pinMode(7,OUTPUT); // 433 Radio
   pinMode(10,OUTPUT); // SPI
   Serial.begin(115200);
   swSerial.begin(9600);
