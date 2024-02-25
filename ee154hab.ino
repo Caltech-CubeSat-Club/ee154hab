@@ -22,7 +22,7 @@
 #include <SPI.h>
 #include <SD.h>
 #include <SoftwareSerial.h>
-#include <TinyGPSMinus.h>
+#include <TinyGPSPlus.h>
 #include "sensors.h"
 #include "funcs.h"
 
@@ -34,6 +34,7 @@ void setup() {
   pinMode(5,OUTPUT); // Extra light
   pinMode(7,OUTPUT); // 433 Radio
   pinMode(10,OUTPUT); // SPI
+  pinMode(X, INPUT); // GPS fix status
   Serial.begin(115200);
   swSerial.begin(9600);
   Wire.begin();
@@ -54,7 +55,7 @@ void setup() {
 
 void loop() {
   smartdelay(5000);
-
+  
   SensorData data = measureAllSensors();
   printSensorDataCSV(data);
   // txCallSign();
