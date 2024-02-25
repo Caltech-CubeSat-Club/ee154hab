@@ -5,7 +5,7 @@ BME280 bme280_int;
 BME280 bme280_ext;
 LSM9DS1 lsm9ds1;
 
-TinyGPSPlus gps;
+TinyGPSMinus gps;
 SoftwareSerial swSerial(8, 9);
 
 int sampleNumber = 0;

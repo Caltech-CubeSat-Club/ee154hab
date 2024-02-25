@@ -49,7 +49,7 @@ void setup() {
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("mgkp5.csv", FILE_WRITE);
+  dataFile = SD.open("mgkp4.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
 }
 
@@ -61,13 +61,15 @@ void loop() {
   }
 
   if (millis() - lastLowMillis > 2000){
-    smartdelay(5000);
 
-    SensorData data = measureAllSensors();
-    printSensorDataCSV(data);
-    // txCallSign();
   }
+
+  smartdelay(5000);
   
+  
+  SensorData data = measureAllSensors();
+  printSensorDataCSV(data);
+  // txCallSign();
 }
 
 
