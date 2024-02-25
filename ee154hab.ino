@@ -26,15 +26,15 @@
 #include "sensors.h"
 #include "funcs.h"
 
+#define FIXPIN 7 // GPS Fix
 
 void setup() {
   pinMode(2,OUTPUT); // Error Indicator light
   pinMode(3,OUTPUT); // Extra light (GPS fix indicator? would need to add jumper between FIX pin and this pin)
   pinMode(4,OUTPUT); // Extra light
   pinMode(5,OUTPUT); // Extra light
-  pinMode(7,OUTPUT); // 433 Radio
   pinMode(10,OUTPUT); // SPI
-  pinMode(X, INPUT); // GPS fix status
+  pinMode(FIXPIN, INPUT); // GPS fix status
   Serial.begin(115200);
   swSerial.begin(9600);
   Wire.begin();
@@ -49,16 +49,25 @@ void setup() {
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("mgkp4.csv", FILE_WRITE);
+  dataFile = SD.open("mgkp5.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
 }
 
 void loop() {
-  smartdelay(5000);
+  fix_status = digitalRead(FIXPIN);
+  int lastLowMillis = millis();
+  if (!fix_status){
+    lastLowMillis = millis();
+  }
+
+  if (millis() - lastLowMillis > 2000){
+    smartdelay(5000);
+
+    SensorData data = measureAllSensors();
+    printSensorDataCSV(data);
+    // txCallSign();
+  }
   
-  SensorData data = measureAllSensors();
-  printSensorDataCSV(data);
-  // txCallSign();
 }
 
 
