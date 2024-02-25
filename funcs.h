@@ -1,11 +1,8 @@
 #ifndef FUNCS_H
 #define FUNCS_H
 
-File dataFile;
+#include "defs.h"
 
-const char* morse[] = {".-", "--.-", "....-", ".-", "---", ".-."};
-
-int errorCode = 0;
 void errorLoop(const __FlashStringHelper* message, const uint8_t pattern, const int wait) {
   while (1) {
     Serial.println(message);
@@ -40,16 +37,12 @@ void handleErrors(int errorCode) {
   }
 }
 
-void txCallSign() {
-  for (const char** m = morse; m < morse + 6; m++) {
-    for (const char* c = *m; *c; c++) {
-      digitalWrite(7, HIGH);
-      delay(*c == '.' ? 250 : 750);
-      digitalWrite(7, LOW);
-      delay(60);
-    }
-    delay(180);
-  }
+static void smartdelay(unsigned long ms) {
+  unsigned long start = millis();
+  do {
+    while (gps.available())
+      nmea.process(gps.read());
+  } while (millis() - start < ms);
 }
 
 #endif

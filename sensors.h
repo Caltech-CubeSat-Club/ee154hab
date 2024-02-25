@@ -1,38 +1,6 @@
 #ifndef SENSORS_H
 #define SENSORS_H
 
-BME280 bme280_int;
-BME280 bme280_ext;
-LSM9DS1 lsm9ds1;
-
-TinyGPSMinus gps;
-SoftwareSerial swSerial(8, 9);
-
-int sampleNumber = 0;
-
-struct SensorData {
-  unsigned long timestamp = 0;
-  int sampleCount = 0;
-  String date = "";
-  float latitude = 0;
-  float longitude = 0;
-  float gpsAltitude = 0;
-  float gpsHeading = 0;
-  float gpsSpeed = 0;
-  bool gpsFix = false;
-  float extPressure = 0;
-  float extAltitude = 0;
-  float humidity = 0;
-  float intTemp = 0;
-  float extTemp = 0;
-  float attitude[3];      // Roll, Pitch, CompassHeading
-  float attitudeRate[3];  // RollRate, PitchRate, YawRate
-  float acceleration[3];  // AccelX, AccelY, AccelZ
-  float batteryCurrent = 0;
-  float batteryTemp = 0;
-};
-
-
 /*    ACCELEROMETER/GYRO/MAGNETOMETER FUNCTIONS       */
 /*    ACCELEROMETER/GYRO/MAGNETOMETER FUNCTIONS       */
 /*    ACCELEROMETER/GYRO/MAGNETOMETER FUNCTIONS       */
@@ -109,34 +77,7 @@ void readBME280Data(SensorData& data) {
 /*    GPS FUNCTIONS     */
 /*    GPS FUNCTIONS     */
 void readGPSData(SensorData& data) {
-  char lat[10], lon[11]; 
-  unsigned long age;
-  int year;
-  byte month, day, hour, minute, second;
-
-  gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, NULL, &age);
-  if (year == 2024) {
-    char sz[17];
-    sprintf(sz, "%02d/%02d/%02d %02d:%02d:%02d", month, day, year, hour, minute, second);
-    data.date = sz;
-    data.latitude = atof(gps.get_latitude());
-    data.longitude = atof(gps.get_longitude());
-    if (gps.f_altitude() != TinyGPSMinus::GPS_INVALID_F_ALTITUDE) 
-      data.gpsAltitude = gps.f_altitude();
-    if (gps.f_course() != TinyGPSMinus::GPS_INVALID_F_ANGLE)
-      data.gpsHeading = gps.f_course();
-    if (gps.f_speed_kmph() != TinyGPSMinus::GPS_INVALID_F_SPEED)
-      data.gpsSpeed = gps.f_speed_kmph();
-    data.gpsFix = true;
-  }
-}
-
-static void smartdelay(unsigned long ms) {
-  unsigned long start = millis();
-  do {
-    while (swSerial.available())
-      gps.encode(swSerial.read());
-  } while (millis() - start < ms);
+ 
 }
 /*    END GPS FUNCTIONS     */
 /*    END GPS FUNCTIONS     */
