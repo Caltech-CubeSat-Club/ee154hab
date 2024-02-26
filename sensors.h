@@ -97,12 +97,45 @@ void readBME280Data(SensorData& data) {
   data.extPressure = bme280_ext.readFloatPressure(); // Pressure in Pa
   data.extAltitude = bme280_ext.readFloatAltitudeMeters(); // Altitude in meters
   data.humidity = bme280_int.readFloatHumidity(); // Humidity in %
-  data.intTemp = bme280_int.readTempC(); // Internal temperature in Celsius
+  //data.intTemp = bme280_int.readTempC(); // Internal temperature in Celsius
   data.extTemp = bme280_ext.readTempC(); // External temperature in Celsius
 }
 /*    END BME280 FUNCTIONS     */
 /*    END BME280 FUNCTIONS     */
 /*    END BME280 FUNCTIONS     */
+
+void readIntTemp(SensorData& data) {
+  uint8_t i;
+  float average;
+  float samples[5];
+
+  // take N samples in a row, with a slight delay
+  for (i=0; i < 5; i++) {
+   samples[i] = analogRead(A1);
+   delay(10);
+  }
+  
+  // average all the samples out
+  average = 0;
+  for (i=0; i< 5; i++) {
+     average += samples[i];
+  }
+  average /= 5;
+  
+  // convert the value to resistance
+  average = 1023 / average - 1;
+  average = 100000 / average; // 100 kOhm resistor is used
+
+  float steinhart;
+  steinhart = average / 12200;     // (R/Ro) Ro is resistance at a reference temp.
+  steinhart = log(steinhart);                  // ln(R/Ro)
+  steinhart /= 3950;                   // 1/B * ln(R/Ro)
+  steinhart += 1.0 / (20.5556 + 273.15); // + (1/To) To is lab temperature 20.5556C
+  steinhart = 1.0 / steinhart;                 // Invert
+  steinhart -= 273.15;                         // convert absolute temp to C
+  
+  data.batteryTemp = steinhart;
+}
 
 
 /*    GPS FUNCTIONS     */
@@ -234,6 +267,7 @@ SensorData measureAllSensors() {
   readGPSData(data);
 
   readBME280Data(data);
+  readIntTemp(data);
 
   readIMUdata(data);
 

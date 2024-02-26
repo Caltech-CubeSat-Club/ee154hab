@@ -38,11 +38,11 @@ void setup() {
   swSerial.begin(9600);
   Wire.begin();
 
-  bme280_int.setI2CAddress(0x77);
+  //bme280_int.setI2CAddress(0x77);
   bme280_ext.setI2CAddress(0x76);
   lsm9ds1.settings.accel.scale = 4;
 
-  errorCode += bme280_int.beginI2C() ? 0 : 10;
+  //errorCode += bme280_int.beginI2C() ? 0 : 10;
   errorCode += bme280_ext.beginI2C() ? 0 : 20;
   errorCode += lsm9ds1.begin() ? 0 : 1;
   errorCode += SD.begin(10) ? 0 : 100;
