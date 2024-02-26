@@ -1,7 +1,7 @@
 #ifndef SENSORS_H
 #define SENSORS_H
 
-BME280 bme280_int;
+//BME280 bme280_int;
 BME280 bme280_ext;
 LSM9DS1 lsm9ds1;
 
