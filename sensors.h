@@ -53,8 +53,14 @@ float getCompassHeading() {
 }
 
 void getAttitude(float* attitude) {
-  attitude[0] = atan2(lsm9ds1.ay, lsm9ds1.az) * 180.0 / PI;
-  attitude[1] = atan2(-lsm9ds1.ax, sqrt(lsm9ds1.ay * lsm9ds1.ay + lsm9ds1.az * lsm9ds1.az)) * 180.0 / PI;
+  float ax = lsm9ds1.ax;
+  float ay = lsm9ds1.ay;
+  float az = lsm9ds1.az;
+  
+  attitude[0] = atan2(ay, az) * 180.0 / PI;
+  
+  
+  attitude[1] = atan2(-ax, sqrt(ay * ay + az * az)) * 180.0 / PI;
   attitude[2] = getCompassHeading();
 }
 
