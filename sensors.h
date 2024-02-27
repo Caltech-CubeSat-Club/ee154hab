@@ -159,8 +159,8 @@ void readBatteryCurrent(SensorData& data) {
 
   int sensorValue = 0;
 
-  float sensitivity = -90.0 / 770.0; //90mA per 770mV. Inverted
-  float Vref = 1860; // Output voltage with no current: ~ 1950mV
+  float sensitivity = -90.0 / 80.0; //90mA per 80 mV
+  float Vref = 2460; // Output voltage with no current: ~ 2500mV or 2.5V
 
   for (int i = 0; i < avgSamples; i++)
   {
