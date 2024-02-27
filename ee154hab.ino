@@ -48,7 +48,7 @@ void setup() {
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("mgkp4.csv", FILE_WRITE);
+  dataFile = SD.open("OZ3.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
 }
 
