@@ -157,8 +157,8 @@ void readBatteryCurrent(SensorData& data) {
 
   int sensorValue = 0;
 
-  float sensitivity = -90.0 / 770.0; //90mA per 770mV. Inverted
-  float Vref = 1860; // Output voltage with no current: ~ 1950mV
+  float sensitivity = -90.0 / 80.0; //90mA per 250mV
+  float Vref = 2460; // Output voltage with no current: ~ 2460 mV
 
   for (int i = 0; i < avgSamples; i++)
   {
@@ -243,7 +243,7 @@ SensorData measureAllSensors() {
   readIMUdata(data);
 
   readBatteryCurrent(data);
-  data.batteryTemp = readThermistorTemp((byte)A0);
+  data.batteryTemp = readThermistorTemp((byte)A2);
 
   return data;
 }
