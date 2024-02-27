@@ -25,12 +25,12 @@ void handleErrors(int errorCode) {
       return;
     case 1: // LSM9DS1 error
       errorLoop(F("LSM9DS1 :("), 0b00001010, 200);
-    case 10: // BME280 internal error
-      errorLoop(F("BME280_int :("), 0b00010100, 200);
+    // case 10: // BME280 internal error
+    //   errorLoop(F("BME280_int :("), 0b00010100, 200);
     case 20: // BME280 external error
       errorLoop(F("BME280_ext :("), 0b00010001, 200);
-    case 30: // Both BME280 error
-      errorLoop(F("Both BME280 :("), 0b11001100, 200);
+    // case 30: // Both BME280 error
+    //   errorLoop(F("Both BME280 :("), 0b11001100, 200);
     case 100: // SD card error
       errorLoop(F("SD :("), 0b11101100, 200);
     case 200: // File error

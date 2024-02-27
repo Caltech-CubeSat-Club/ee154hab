@@ -127,8 +127,8 @@ void readGPSData(SensorData& data) {
     data.longitude = atof(gps.get_longitude());
     if (gps.f_altitude() != TinyGPSMinus::GPS_INVALID_F_ALTITUDE) 
       data.gpsAltitude = gps.f_altitude();
-    if (gps.f_course() != TinyGPSMinus::GPS_INVALID_F_ANGLE)
-      data.gpsHeading = gps.f_course();
+    // if (gps.f_course() != TinyGPSMinus::GPS_INVALID_F_ANGLE)
+    //   data.gpsHeading = gps.f_course();
     if (gps.f_speed_kmph() != TinyGPSMinus::GPS_INVALID_F_SPEED)
       data.gpsSpeed = gps.f_speed_kmph();
     data.gpsFix = true;
@@ -190,22 +190,17 @@ void readBatteryCurrent(SensorData& data) {
 /*    THERMISTOR SENSOR FUNCTIONS     */
 /*    THERMISTOR SENSOR FUNCTIONS     */
 /*    THERMISTOR SENSOR FUNCTIONS     */
-float readThermistorTemp(byte pin) {
+float readThermistorTemp(byte pin, unsigned long Ro) {
   uint8_t i;
   float average;
-  float samples[5];
 
   // take N samples in a row, with a slight delay
   for (i=0; i < 5; i++) {
-   samples[i] = analogRead(pin);
+   average += analogRead(pin);
    delay(10);
   }
   
   // average all the samples out
-  average = 0;
-  for (i=0; i< 5; i++) {
-     average += samples[i];
-  }
   average /= 5;
   
   // convert the value to resistance
@@ -213,7 +208,7 @@ float readThermistorTemp(byte pin) {
   average = 100000 / average; // 100 kOhm resistor is used
 
   float steinhart;
-  steinhart = average / 12200;     // (R/Ro) Ro is resistance at a reference temp.
+  steinhart = average / Ro;     // (R/Ro) Ro is resistance at a reference temp.
   steinhart = log(steinhart);                  // ln(R/Ro)
   steinhart /= 3950;                   // 1/B * ln(R/Ro)
   steinhart += 1.0 / (20.5556 + 273.15); // + (1/To) To is lab temperature 20.5556C
@@ -238,12 +233,12 @@ SensorData measureAllSensors() {
   readGPSData(data);
 
   readBME280Data(data);
-  data.intTemp = readThermistorTemp((byte)A2);
+  data.intTemp = readThermistorTemp((byte)A2, 11880);
 
   readIMUdata(data);
 
   readBatteryCurrent(data);
-  data.batteryTemp = readThermistorTemp((byte)A1);
+  data.batteryTemp = readThermistorTemp((byte)A1, 12200);
 
   return data;
 }
