@@ -14,6 +14,7 @@ struct SensorData {
   unsigned long timestamp = 0;
   int sampleCount = 0;
   //String date = "";
+  String gmtTime = "";
   float latitude = 0;
   float longitude = 0;
   float gpsAltitude = 0;
