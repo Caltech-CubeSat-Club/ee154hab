@@ -48,19 +48,19 @@ void setup() {
   bme280_ext.setI2CAddress(0x76);
   lsm9ds1.settings.accel.scale = 4;
 
-  errorCode += bme280_int.beginI2C() ? 0 : 10;
+  //errorCode += bme280_int.beginI2C() ? 0 : 10;
   errorCode += bme280_ext.beginI2C() ? 0 : 20;
   errorCode += lsm9ds1.begin() ? 0 : 1;
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("OZ3test1.csv", FILE_WRITE);
+  dataFile = SD.open("OZ3test2.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
 
   //setup hardware pins used by device, then check if device is found
   if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
   {
-    Serial.println(F("LoRa Device found"));
+    // Serial.println(F("LoRa Device found"));
     //led_Flash(2, 125);                                   //two further quick LED flashes to indicate device found
     //delay(1000);
   }
@@ -85,7 +85,7 @@ void loop() {
   SensorData data = measureAllSensors();
   printSensorDataCSV(data);
 
-  Serial.println("Playing tone");
+  //Serial.println("Playing tone");
   digitalWrite(3, HIGH);
   LT.toneFM(1000, 1000, deviation, adjustfreq, TXpower);
   digitalWrite(3, LOW);
@@ -95,14 +95,19 @@ void loop() {
 
 
 void printSensorDataCSV(const SensorData& data) {
-  dataFile.print(data.timestamp);
-  dataFile.print(F(","));
+  // dataFile.print(data.timestamp);
+  // dataFile.print(F(","));
   dataFile.print(data.sampleCount);
   dataFile.print(F(","));
 
   // dataFile.print(data.date);
   // dataFile.print(F(","));
-  dataFile.print(data.gmtTime);
+  //dataFile.print(data.gmtTime);
+  dataFile.print(data.gmtHour);
+  dataFile.print(F(","));
+  dataFile.print(data.gmtMin);
+  dataFile.print(F(","));
+  dataFile.print(data.gmtSec);
   dataFile.print(F(","));
   dataFile.print(data.latitude, 6);
   dataFile.print(F(","));
@@ -110,8 +115,8 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.print(F(","));
   dataFile.print(data.gpsAltitude);
   dataFile.print(F(","));
-  dataFile.print(data.gpsHeading);
-  dataFile.print(F(","));
+  // dataFile.print(data.gpsHeading);
+  // dataFile.print(F(","));
   dataFile.print(data.gpsSpeed);
   dataFile.print(F(","));
 

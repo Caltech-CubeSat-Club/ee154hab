@@ -11,14 +11,17 @@ SoftwareSerial swSerial(8, 9);
 int sampleNumber = 0;
 
 struct SensorData {
-  unsigned long timestamp = 0;
+  //unsigned long timestamp = 0;
   int sampleCount = 0;
   //String date = "";
-  String gmtTime = "";
+  //String gmtTime = "";
+  uint8_t gmtHour = 0;
+  uint8_t gmtMin = 0;
+  uint8_t gmtSec = 0;
   float latitude = 0;
   float longitude = 0;
   float gpsAltitude = 0;
-  float gpsHeading = 0;
+  //float gpsHeading = 0;
   float gpsSpeed = 0;
   float extPressure = 0;
   float extAltitude = 0;
@@ -116,11 +119,14 @@ void readBME280Data(SensorData& data) {
 /*    GPS FUNCTIONS     */
 void readGPSData(SensorData& data) {
   //data.date = String(gps.date.year()) + String(gps.date.month()) + String(gps.date.day());
-  data.gmtTime = String(gps.time.hour()) + String(gps.time.minute()) + String(gps.time.second());
+  //data.gmtTime = String(gps.time.hour()) + String(gps.time.minute()) + String(gps.time.second());
+  data.gmtHour = gps.time.hour();
+  data.gmtMin = gps.time.minute();
+  data.gmtSec = gps.time.second();
   data.latitude = gps.location.lat();
   data.longitude = gps.location.lng();
   data.gpsAltitude = gps.altitude.meters();
-  data.gpsHeading = gps.course.deg();
+  //data.gpsHeading = gps.course.deg();
   data.gpsSpeed = gps.speed.kmph();
 }
 
@@ -182,19 +188,14 @@ void readBatteryCurrent(SensorData& data) {
 void readBatteryTemp(SensorData& data) {
   uint8_t i;
   float average;
-  float samples[5];
 
   // take N samples in a row, with a slight delay
   for (i=0; i < 5; i++) {
-   samples[i] = analogRead(A1);
+   average += analogRead(A1);
    delay(10);
   }
   
   // average all the samples out
-  average = 0;
-  for (i=0; i< 5; i++) {
-     average += samples[i];
-  }
   average /= 5;
   
   // convert the value to resistance
@@ -220,7 +221,7 @@ void readBatteryTemp(SensorData& data) {
 SensorData measureAllSensors() {
   SensorData data;
   
-  data.timestamp = millis();
+  //data.timestamp = millis();
   
   data.sampleCount = sampleNumber++;
   
