@@ -23,7 +23,7 @@ Uses 32240 bytes of storage space (of 32256!!)
 #include <SPI.h>
 #include <SD.h>
 #include <SoftwareSerial.h>
-#include <TinyGPSMinus.h>
+#include <TinyGPSPlus.h>
 #include "sensors.h"
 #include "funcs.h"
 
@@ -33,7 +33,6 @@ void setup() {
   pinMode(3,OUTPUT); // Extra light (GPS fix indicator? would need to add jumper between FIX pin and this pin)
   pinMode(4,OUTPUT); // Extra light
   pinMode(5,OUTPUT); // Extra light
-  pinMode(7,INPUT); // GPS Fix
   pinMode(10,OUTPUT); // SPI
   Serial.begin(115200);
   swSerial.begin(9600);
@@ -68,22 +67,22 @@ void printSensorDataCSV(const SensorData& data) {
   Serial.print(F(","));
   Serial.print(data.sampleCount);
   Serial.print(F(","));
-  if (data.gpsFix) {
-    Serial.print(data.date);
-    Serial.print(F(","));
-    Serial.print(data.latitude);
-    Serial.print(F(","));
-    Serial.print(data.longitude);
-    Serial.print(F(","));
-    Serial.print(data.gpsAltitude);
-    Serial.print(F(","));
-    Serial.print(data.gpsHeading);
-    Serial.print(F(","));
-    Serial.print(data.gpsSpeed);
-    Serial.print(F(","));
-  } else {
-    Serial.print(F(",,,,,,"));
-  }
+
+  // dataFile.print(data.date);
+  // dataFile.print(F(","));
+  dataFile.print(data.gmtTime);
+  dataFile.print(F(","));
+  dataFile.print(data.latitude, 6);
+  dataFile.print(F(","));
+  dataFile.print(data.longitude, 6);
+  dataFile.print(F(","));
+  dataFile.print(data.gpsAltitude);
+  dataFile.print(F(","));
+  dataFile.print(data.gpsHeading);
+  dataFile.print(F(","));
+  dataFile.print(data.gpsSpeed);
+  dataFile.print(F(","));
+
   Serial.print(data.extPressure);
   Serial.print(F(","));
   Serial.print(data.extAltitude);

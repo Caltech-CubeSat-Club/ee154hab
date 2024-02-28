@@ -5,7 +5,7 @@ BME280 bme280_int;
 BME280 bme280_ext;
 LSM9DS1 lsm9ds1;
 
-TinyGPSMinus gps;
+TinyGPSPlus gps;
 SoftwareSerial swSerial(8, 9);
 
 int sampleNumber = 0;
@@ -13,7 +13,7 @@ int sampleNumber = 0;
 struct SensorData {
   unsigned long timestamp = 0;
   int sampleCount = 0;
-  String date = "";
+  //String date = "";
   float latitude = 0;
   float longitude = 0;
   float gpsAltitude = 0;
@@ -115,26 +115,13 @@ void readBME280Data(SensorData& data) {
 /*    GPS FUNCTIONS     */
 /*    GPS FUNCTIONS     */
 void readGPSData(SensorData& data) {
-  char lat[10], lon[11]; 
-  unsigned long age;
-  int year;
-  byte month, day, hour, minute, second;
-
-  gps.crack_datetime(&year, &month, &day, &hour, &minute, &second, NULL, &age);
-  if (year == 2024) {
-    char sz[17];
-    sprintf(sz, "%02d/%02d/%02d %02d:%02d:%02d", month, day, year, hour, minute, second);
-    data.date = sz;
-    data.latitude = atof(gps.get_latitude());
-    data.longitude = atof(gps.get_longitude());
-    if (gps.f_altitude() != TinyGPSMinus::GPS_INVALID_F_ALTITUDE) 
-      data.gpsAltitude = gps.f_altitude();
-    if (gps.f_course() != TinyGPSMinus::GPS_INVALID_F_ANGLE)
-      data.gpsHeading = gps.f_course();
-    if (gps.f_speed_kmph() != TinyGPSMinus::GPS_INVALID_F_SPEED)
-      data.gpsSpeed = gps.f_speed_kmph();
-    data.gpsFix = true;
-  }
+  //data.date = String(gps.date.year()) + String(gps.date.month()) + String(gps.date.day());
+  data.gmtTime = String(gps.time.hour()) + String(gps.time.minute()) + String(gps.time.second());
+  data.latitude = gps.location.lat();
+  data.longitude = gps.location.lng();
+  data.gpsAltitude = gps.altitude.meters();
+  data.gpsHeading = gps.course.deg();
+  data.gpsSpeed = gps.speed.kmph();
 }
 
 static void smartdelay(unsigned long ms) {
