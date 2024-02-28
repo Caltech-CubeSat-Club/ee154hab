@@ -20,7 +20,6 @@ struct SensorData {
   float gpsAltitude = 0;
   float gpsHeading = 0;
   float gpsSpeed = 0;
-  bool gpsFix = false;
   float extPressure = 0;
   float extAltitude = 0;
   float humidity = 0;

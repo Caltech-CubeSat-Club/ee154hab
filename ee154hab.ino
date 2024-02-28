@@ -21,11 +21,13 @@ Uses 32240 bytes of storage space (of 32256!!)
 #include <SparkFunBME280.h>
 #include <SparkFunLSM9DS1.h>
 #include <SPI.h>
-#include <SD.h>
+#include <SdFat.h>
 #include <SoftwareSerial.h>
 #include <TinyGPSPlus.h>
 #include "sensors.h"
 #include "funcs.h"
+
+SdFat SD;
 
 
 void setup() {
@@ -48,7 +50,7 @@ void setup() {
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("OZ3.csv", FILE_WRITE);
+  dataFile = SD.open("OZ3test1.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
 }
 
@@ -63,10 +65,10 @@ void loop() {
 
 
 void printSensorDataCSV(const SensorData& data) {
-  Serial.print(data.timestamp);
-  Serial.print(F(","));
-  Serial.print(data.sampleCount);
-  Serial.print(F(","));
+  dataFile.print(data.timestamp);
+  dataFile.print(F(","));
+  dataFile.print(data.sampleCount);
+  dataFile.print(F(","));
 
   // dataFile.print(data.date);
   // dataFile.print(F(","));
@@ -83,38 +85,38 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.print(data.gpsSpeed);
   dataFile.print(F(","));
 
-  Serial.print(data.extPressure);
-  Serial.print(F(","));
-  Serial.print(data.extAltitude);
-  Serial.print(F(","));
-  Serial.print(data.humidity);
-  Serial.print(F(","));
-  Serial.print(data.intTemp);
-  Serial.print(F(","));
-  Serial.print(data.extTemp);
-  Serial.print(F(","));
-  Serial.print(data.attitude[0]);
-  Serial.print(F(","));
-  Serial.print(data.attitude[1]);
-  Serial.print(F(","));
-  Serial.print(data.attitude[2]);
-  Serial.print(F(","));
-  Serial.print(data.attitudeRate[0]);
-  Serial.print(F(","));
-  Serial.print(data.attitudeRate[1]);
-  Serial.print(F(","));
-  Serial.print(data.attitudeRate[2]);
-  Serial.print(F(","));
-  Serial.print(data.acceleration[0]);
-  Serial.print(F(","));
-  Serial.print(data.acceleration[1]);
-  Serial.print(F(","));
-  Serial.print(data.acceleration[2]);
-  Serial.print(F(","));
-  Serial.print(data.batteryCurrent);
-  Serial.print(F(","));
-  Serial.println(data.batteryTemp);
-  //dataFile.flush();
+  dataFile.print(data.extPressure);
+  dataFile.print(F(","));
+  dataFile.print(data.extAltitude);
+  dataFile.print(F(","));
+  dataFile.print(data.humidity);
+  dataFile.print(F(","));
+  dataFile.print(data.intTemp);
+  dataFile.print(F(","));
+  dataFile.print(data.extTemp);
+  dataFile.print(F(","));
+  dataFile.print(data.attitude[0]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitude[1]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitude[2]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitudeRate[0]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitudeRate[1]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitudeRate[2]);
+  dataFile.print(F(","));
+  dataFile.print(data.acceleration[0]);
+  dataFile.print(F(","));
+  dataFile.print(data.acceleration[1]);
+  dataFile.print(F(","));
+  dataFile.print(data.acceleration[2]);
+  dataFile.print(F(","));
+  dataFile.print(data.batteryCurrent);
+  dataFile.print(F(","));
+  dataFile.println(data.batteryTemp);
+  dataFile.flush();
   // Serial.print(F("GPS fix: "));
   // Serial.println(data.gpsFix ? F("false") : F("true"));
   Serial.print(F("lat: "));
