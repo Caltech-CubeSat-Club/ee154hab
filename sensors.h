@@ -13,7 +13,7 @@ int sampleNumber = 0;
 struct SensorData {
   unsigned long timestamp = 0;
   int sampleCount = 0;
-  String date = "";
+  //String date = "";
   String gmtTime = "";
   float latitude = 0;
   float longitude = 0;
@@ -109,7 +109,7 @@ void readBME280Data(SensorData& data) {
 /*    GPS FUNCTIONS     */
 /*    GPS FUNCTIONS     */
 void readGPSData(SensorData& data) {
-  data.date = String(gps.date.year()) + String(gps.date.month()) + String(gps.date.day());
+  //data.date = String(gps.date.year()) + String(gps.date.month()) + String(gps.date.day());
   data.gmtTime = String(gps.time.hour()) + String(gps.time.minute()) + String(gps.time.second());
   data.latitude = gps.location.lat();
   data.longitude = gps.location.lng();
