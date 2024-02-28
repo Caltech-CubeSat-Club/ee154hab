@@ -102,7 +102,7 @@ void readIMUdata(SensorData& data) {
 void readBME280Data(SensorData& data) {
   data.extPressure = bme280_ext.readFloatPressure(); // Pressure in Pa
   data.extAltitude = bme280_ext.readFloatAltitudeMeters(); // Altitude in meters
-  data.humidity = bme280_int.readFloatHumidity(); // Humidity in %
+  data.humidity = bme280_ext.readFloatHumidity(); // Humidity in %
   data.intTemp = bme280_int.readTempC(); // Internal temperature in Celsius
   data.extTemp = bme280_ext.readTempC(); // External temperature in Celsius
 }

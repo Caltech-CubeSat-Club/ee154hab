@@ -26,19 +26,23 @@ Uses 32240 bytes of storage space (of 32256!!)
 #include <TinyGPSPlus.h>
 #include "sensors.h"
 #include "funcs.h"
+#include <SX127XLT.h>                                          //include the appropriate library  
+#include "Settings.h"                                          //include the setiings file, frequencies, LoRa settings etc   
 
 SdFat SD;
-
+SX127XLT LT;
 
 void setup() {
   pinMode(2,OUTPUT); // Error Indicator light
   pinMode(3,OUTPUT); // Extra light (GPS fix indicator? would need to add jumper between FIX pin and this pin)
-  pinMode(4,OUTPUT); // Extra light
-  pinMode(5,OUTPUT); // Extra light
+  // pinMode(4,OUTPUT); // Extra light
+  // pinMode(5,OUTPUT); // Extra light
+  pinMode(7, OUTPUT);
   pinMode(10,OUTPUT); // SPI
   Serial.begin(115200);
   swSerial.begin(9600);
   Wire.begin();
+  SPI.begin();
 
   bme280_int.setI2CAddress(0x77);
   bme280_ext.setI2CAddress(0x76);
@@ -52,6 +56,27 @@ void setup() {
   handleErrors(errorCode);
   dataFile = SD.open("OZ3test1.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
+
+  //setup hardware pins used by device, then check if device is found
+  if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
+  {
+    Serial.println(F("LoRa Device found"));
+    //led_Flash(2, 125);                                   //two further quick LED flashes to indicate device found
+    //delay(1000);
+  }
+  else
+  {
+    Serial.println(F("No device responding"));
+    // while (1)
+    // {
+    //   //led_Flash(50, 50);                                 //long fast speed LED flash indicates device error
+    // }
+  }
+  
+  LT.setupDirect(Frequency, Offset);
+    
+  // Serial.print(F("Tone Transmitter ready"));
+  // Serial.println();
 }
 
 void loop() {
@@ -59,6 +84,11 @@ void loop() {
 
   SensorData data = measureAllSensors();
   printSensorDataCSV(data);
+
+  Serial.println("Playing tone");
+  digitalWrite(3, HIGH);
+  LT.toneFM(1000, 1000, deviation, adjustfreq, TXpower);
+  digitalWrite(3, LOW);
   // txCallSign();
 }
 
@@ -119,8 +149,8 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.flush();
   // Serial.print(F("GPS fix: "));
   // Serial.println(data.gpsFix ? F("false") : F("true"));
-  Serial.print(F("lat: "));
-  Serial.println(data.latitude);
-  Serial.print(F("lon: "));
-  Serial.println(data.longitude);
+  // Serial.print(F("lat: "));
+  // Serial.println(data.latitude);
+  // Serial.print(F("lon: "));
+  // Serial.println(data.longitude);
 }
