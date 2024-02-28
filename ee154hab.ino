@@ -95,14 +95,13 @@ void loop() {
 
 
 void printSensorDataCSV(const SensorData& data) {
-  // dataFile.print(data.timestamp);
-  // dataFile.print(F(","));
+  dataFile.print(data.timestamp);
+  dataFile.print(F(","));
   dataFile.print(data.sampleCount);
   dataFile.print(F(","));
 
   // dataFile.print(data.date);
   // dataFile.print(F(","));
-  //dataFile.print(data.gmtTime);
   dataFile.print(data.gmtHour);
   dataFile.print(F(","));
   dataFile.print(data.gmtMin);

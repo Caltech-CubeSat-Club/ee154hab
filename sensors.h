@@ -11,10 +11,9 @@ SoftwareSerial swSerial(8, 9);
 int sampleNumber = 0;
 
 struct SensorData {
-  //unsigned long timestamp = 0;
+  unsigned long timestamp = 0;
   int sampleCount = 0;
   //String date = "";
-  //String gmtTime = "";
   uint8_t gmtHour = 0;
   uint8_t gmtMin = 0;
   uint8_t gmtSec = 0;
@@ -221,7 +220,7 @@ void readBatteryTemp(SensorData& data) {
 SensorData measureAllSensors() {
   SensorData data;
   
-  //data.timestamp = millis();
+  data.timestamp = millis();
   
   data.sampleCount = sampleNumber++;
   
