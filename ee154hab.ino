@@ -54,7 +54,7 @@ void setup() {
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("OZ3test2.csv", FILE_WRITE);
+  dataFile = SD.open("OZ3Rad.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
 
   //setup hardware pins used by device, then check if device is found
