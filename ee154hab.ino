@@ -50,7 +50,7 @@ void setup() {
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("OZ3test1.csv", FILE_WRITE);
+  dataFile = SD.open("OZ3NoRad.csv", FILE_WRITE);
   if (!dataFile) handleErrors(200);
 }
 
