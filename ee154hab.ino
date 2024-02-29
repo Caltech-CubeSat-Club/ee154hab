@@ -23,7 +23,7 @@ Uses 30310 bytes of storage
 #include <SPI.h>
 #include <SdFat.h>
 #include <SoftwareSerial.h>
-#include <TinyGPSPlus.h>
+//#include <TinyGPSPlus.h>
 #include "sensors.h"
 #include "funcs.h"
 
@@ -37,8 +37,8 @@ void setup() {
   pinMode(5,OUTPUT); // Extra light
   pinMode(10,OUTPUT); // SPI
   Serial.begin(115200);
-  swSerial.begin(9600);
-  Wire.begin();
+  // swSerial.begin(9600);
+  // Wire.begin();
 
   bme280_int.setI2CAddress(0x77);
   bme280_ext.setI2CAddress(0x76);
@@ -76,22 +76,22 @@ void printSensorDataCSV(const SensorData& data) {
   // dataFile.print(F(","));
   // dataFile.print(data.day);
   // dataFile.print(F(","));
-  dataFile.print(data.gmtHour);
-  dataFile.print(F(","));
-  dataFile.print(data.gmtMin);
-  dataFile.print(F(","));
-  dataFile.print(data.gmtSec);
-  dataFile.print(F(","));
-  dataFile.print(data.latitude, 6);
-  dataFile.print(F(","));
-  dataFile.print(data.longitude, 6);
-  dataFile.print(F(","));
-  dataFile.print(data.gpsAltitude);
-  dataFile.print(F(","));
-  // dataFile.print(data.gpsHeading);
+  // dataFile.print(data.gmtHour);
   // dataFile.print(F(","));
-  dataFile.print(data.gpsSpeed);
-  dataFile.print(F(","));
+  // dataFile.print(data.gmtMin);
+  // dataFile.print(F(","));
+  // dataFile.print(data.gmtSec);
+  // dataFile.print(F(","));
+  // dataFile.print(data.latitude, 6);
+  // dataFile.print(F(","));
+  // dataFile.print(data.longitude, 6);
+  // dataFile.print(F(","));
+  // dataFile.print(data.gpsAltitude);
+  // dataFile.print(F(","));
+  // // dataFile.print(data.gpsHeading);
+  // // dataFile.print(F(","));
+  // dataFile.print(data.gpsSpeed);
+  // dataFile.print(F(","));
 
   dataFile.print(data.extPressure);
   dataFile.print(F(","));
