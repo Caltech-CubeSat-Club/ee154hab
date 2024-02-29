@@ -30,7 +30,7 @@ Uses 30994 bytes of storage space (of 32256!!)
 #include "Settings.h"                                          //include the setiings file, frequencies, LoRa settings etc   
 
 SdFat SD;
-//SX127XLT LT;
+SX127XLT LT;
 
 void setup() {
   pinMode(2,OUTPUT); // Error Indicator light
@@ -58,30 +58,30 @@ void setup() {
   if (!dataFile) handleErrors(200);
 
   //setup hardware pins used by device, then check if device is found
-  // if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
-  // {
-  //   //Serial.println(F("LoRa Device found"));
-  //   led_Flash(3, 2, 125);                                   //two further quick LED flashes to indicate device found
-  //   //delay(1000);
-  // }
-  // else
-  // {
-  //   Serial.println(F("No device responding"));
-  //   while (1)
-  //   {
-  //     led_Flash(3, 50, 50);                                 //long fast speed LED flash indicates device error
-  //   }
-  // }
+  if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
+  {
+    //Serial.println(F("LoRa Device found"));
+    led_Flash(3, 2, 125);                                   //two further quick LED flashes to indicate device found
+    //delay(1000);
+  }
+  else
+  {
+    Serial.println(F("No device responding"));
+    while (1)
+    {
+      led_Flash(3, 50, 50);                                 //long fast speed LED flash indicates device error
+    }
+  }
   
-  // LT.setupDirect(Frequency, Offset);
+  LT.setupDirect(Frequency, Offset);
     
-  // Serial.print(F("Tone Transmitter ready"));
-  // Serial.println();
+  Serial.print(F("Tone Transmitter ready"));
+  Serial.println();
 }
 
 void loop() {
   smartdelay(5000);
-
+  digitalWrite(3, HIGH);
   SensorData data = measureAllSensors();
   printSensorDataCSV(data);
 
@@ -89,14 +89,49 @@ void loop() {
 
   
   
-  if (data.sampleCount % 3 ==0) {
+  if (data.sampleCount % 6 ==0) {
+    
+    
+    //Kemal Pulungan KO6CZN
+    // flashSequence("-.-");
+    // delay(300);
+    // flashSequence("---");
+    // delay(300);
+    // flashSequence("-....");
+    // delay(300);
+    // flashSequence("-.-.");
+    // delay(300);
+    // flashSequence("--..");
+    // delay(300);
+    // flashSequence("-.");
+    // delay(300);
+
+    //Michael Gutierrez (Guutz) KQ4AOR
+    flashSequence("-.-");
+    delay(300);
+    flashSequence("--.-");
+    delay(300);
+    flashSequence("....-");
+    delay(300);
+    flashSequence(".-");
+    delay(300);
+    flashSequence("---");
+    delay(300);
+    flashSequence(".-.");
+    delay(300);
+
+    
+
+
     // String alt = String((int)data.extAltitude);
     // Serial.println(alt);
-    //digitalWrite(3, HIGH);
-    transmitMorse("ko6czn ");//, LT);
+    //
+    //delay(100);
+    //transmitMorse("ko6czn ");//, LT);
     //transmitMorse(alt);//, LT);
     //digitalWrite(3, LOW);
   }
+  digitalWrite(3, LOW);
 }
 
 void led_Flash(uint8_t led, uint16_t flashes, uint16_t delaymS) {
@@ -228,13 +263,13 @@ void flashSequence(char* sequence){//, const SX127XLT& LT) {
 void flashDotOrDash(char dotOrDash){//, const SX127XLT& LT) {
   if (dotOrDash == '.')
   {
-    led_Flash(3, 1, 100);
-    //LT.toneFM(1000, 100, deviation, adjustfreq, TXpower);
+    //led_Flash(3, 1, 100);
+    LT.toneFM(1000, 100, deviation, adjustfreq, TXpower);
   }
   else // must be a - 
   {
-    led_Flash(3, 1, 300);
-    //LT.toneFM(1000, 300, deviation, adjustfreq, TXpower);
+    //led_Flash(3, 1, 300);
+    LT.toneFM(1000, 300, deviation, adjustfreq, TXpower);
   }
   delay(100);
 }

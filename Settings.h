@@ -27,6 +27,6 @@ const uint32_t Offset = 0;                      //offset frequency for calibrati
 const uint16_t deviation = 10000;               //deviation, total frequency shift low to high
 const float adjustfreq = 0.9;                   //adjustment to tone frequency 
 
-const int8_t TXpower = 10;                      //LoRa transmit power in dBm
+const int8_t TXpower = 20;                      //LoRa transmit power in dBm
 
 
