@@ -11,7 +11,7 @@
   - Battery current
   - Battery temperature
 
-Uses 32240 bytes of storage space (of 32256!!)
+Uses 30310 bytes of storage
   CSV format:
   Timestamp (ms), Sample Count, Date (if available), Latitude, Longitude, Ext. Pressure (Pa), Ext. Altitude (m), Humidity (%), Int. Temperature (°C), Ext. Temperature (°C), Rot X (°), Rot Y (°), Compass Heading (°), Rot X Rate (°/s), Rot Y Rate (°/s), Rot Z Rate (°/s), Accel X (m/s^2), Accel Y (m/s^2), Accel Z (m/s^2), Battery Current (A), Battery Temperature (°C)
   Heading: East is negative, West is positive
