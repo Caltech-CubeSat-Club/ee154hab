@@ -70,9 +70,17 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.print(data.sampleCount);
   dataFile.print(F(","));
 
-  // dataFile.print(data.date);
+   // dataFile.print(data.year);   //Removing date saves ~200 bytes
+  // dataFile.print(F(","));      //Because the mission is < 2 hours, no date needed
+  // dataFile.print(data.month);
   // dataFile.print(F(","));
-  dataFile.print(data.gmtTime);
+  // dataFile.print(data.day);
+  // dataFile.print(F(","));
+  dataFile.print(data.gmtHour);
+  dataFile.print(F(","));
+  dataFile.print(data.gmtMin);
+  dataFile.print(F(","));
+  dataFile.print(data.gmtSec);
   dataFile.print(F(","));
   dataFile.print(data.latitude, 6);
   dataFile.print(F(","));
@@ -80,8 +88,8 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.print(F(","));
   dataFile.print(data.gpsAltitude);
   dataFile.print(F(","));
-  dataFile.print(data.gpsHeading);
-  dataFile.print(F(","));
+  // dataFile.print(data.gpsHeading);
+  // dataFile.print(F(","));
   dataFile.print(data.gpsSpeed);
   dataFile.print(F(","));
 
