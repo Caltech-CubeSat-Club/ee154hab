@@ -85,10 +85,10 @@ void loop() {
   SensorData data = measureAllSensors();
   printSensorDataCSV(data);
 
-  if data.sampleCount % 1 == 0 {
+  if (data.sampleCount % 3 ==0) {
     digitalWrite(3, HIGH);
-    flashSequence('ko6czn');
-    flashSequence(data.extAltitude, 0)
+    flashSequence('ko6czn', LT);
+    flashSequence(((int)data.extAltitude, 0), LT);
     digitalWrite(3, LOW);
   }
 }
@@ -176,26 +176,59 @@ void printSensorDataCSV(const SensorData& data) {
   // Serial.println(data.longitude);
 }
 
+void transmitMorseAlti(const SensorData& data, const SX127XLT& LT){
+  char* letters[] = {
+".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", // A-I
+".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", // J-R 
+"...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." // S-Z
+};
+
+//For Numbers
+char* numbers[] = {
+  "-----", ".----", "..---", "...--", "....-", ".....",
+"-....", "--...", "---..", "----."
+};
+
+  char* ch = 'ko6czn';
+
+  int i = 0;
+  while (ch[i] != NULL)
+  {
+    //ch = Serial.read(); // read a single letter if (ch >= 'a' && ch <= 'z')
+    if (ch[i] >= 'a' && ch[i] <= 'z')
+    {
+      flashSequence(letters[ch[i] - 'a'], LT);
+    }
+    else if (ch[i] >= 'A' && ch[i] <= 'Z') {
+      flashSequence(letters[ch[i] - 'A'], LT); 
+    }
+    else if (ch[i] >= '0' && ch[i] <= '9') {
+      flashSequence(numbers[ch[i] - '0'], LT); 
+    }
+    else if (ch[i] == ' ') {
+      delay(400);
+    }
+    i++;
+  }
+}
+
 void flashSequence(char* sequence, const SX127XLT& LT) {
   int i = 0;
   while (sequence[i] != NULL) {
-    flashDotOrDash(sequence[i]);
+    flashDotOrDash(sequence[i], LT);
     i++; 
   }
-  delay(dotDelay * 3);
+  delay(600);
 }
 
 
 void flashDotOrDash(char dotOrDash, const SX127XLT& LT) {
-  onTime = 0;
-  
   if (dotOrDash == '.')
   {
-    onTime = 200;
+    LT.toneFM(1000, 100, deviation, adjustfreq, TXpower);
   }
   else // must be a - 
   {
-    onTime = 600;
+    LT.toneFM(1000, 300, deviation, adjustfreq, TXpower);
   }
-  LT.toneFM(1000, onTime, deviation, adjustfreq, TXpower);
 }
