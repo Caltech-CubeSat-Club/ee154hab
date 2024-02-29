@@ -61,7 +61,7 @@ void setup() {
   if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
   {
     //Serial.println(F("LoRa Device found"));
-    led_Flash(2, 125);                                   //two further quick LED flashes to indicate device found
+    led_Flash(3, 2, 125);                                   //two further quick LED flashes to indicate device found
     //delay(1000);
   }
   else
@@ -69,7 +69,7 @@ void setup() {
     Serial.println(F("No device responding"));
     while (1)
     {
-      led_Flash(50, 50);                                 //long fast speed LED flash indicates device error
+      led_Flash(3, 50, 50);                                 //long fast speed LED flash indicates device error
     }
   }
   
@@ -85,88 +85,92 @@ void loop() {
   SensorData data = measureAllSensors();
   printSensorDataCSV(data);
 
+  //LT.toneFM(1000, 1000, deviation, adjustfreq, TXpower);
+
+  
+  
   if (data.sampleCount % 3 ==0) {
+    Serial.println((int)data.extAltitude);
     digitalWrite(3, HIGH);
     flashSequence('ko6czn', LT);
-    flashSequence(((int)data.extAltitude, 0), LT);
+    flashSequence(((int)data.extAltitude), LT);
     digitalWrite(3, LOW);
   }
 }
 
-void led_Flash(uint16_t flashes, uint16_t delaymS)
-{
+void led_Flash(uint8_t led, uint16_t flashes, uint16_t delaymS) {
   uint16_t index;
   for (index = 1; index <= flashes; index++)
   {
-    digitalWrite(LED1, HIGH);
+    digitalWrite(led, HIGH);
     delay(delaymS);
-    digitalWrite(LED1, LOW);
+    digitalWrite(led, LOW);
     delay(delaymS);
   }
 }
 
 void printSensorDataCSV(const SensorData& data) {
-  dataFile.print(data.timestamp);
-  dataFile.print(F(","));
-  dataFile.print(data.sampleCount);
-  dataFile.print(F(","));
+  Serial.print(data.timestamp);
+  Serial.print(F(","));
+  Serial.print(data.sampleCount);
+  Serial.print(F(","));
 
-  // dataFile.print(data.year);   //Removing date saves ~200 bytes
-  // dataFile.print(F(","));      //Because the mission is < 2 hours, no date needed
-  // dataFile.print(data.month);
-  // dataFile.print(F(","));
-  // dataFile.print(data.day);
-  // dataFile.print(F(","));
-  dataFile.print(data.gmtHour);
-  dataFile.print(F(","));
-  dataFile.print(data.gmtMin);
-  dataFile.print(F(","));
-  dataFile.print(data.gmtSec);
-  dataFile.print(F(","));
-  dataFile.print(data.latitude, 6);
-  dataFile.print(F(","));
-  dataFile.print(data.longitude, 6);
-  dataFile.print(F(","));
-  dataFile.print(data.gpsAltitude);
-  dataFile.print(F(","));
-  // dataFile.print(data.gpsHeading);
-  // dataFile.print(F(","));
-  dataFile.print(data.gpsSpeed);
-  dataFile.print(F(","));
+  // Serial.print(data.year);   //Removing date saves ~200 bytes
+  // Serial.print(F(","));      //Because the mission is < 2 hours, no date needed
+  // Serial.print(data.month);
+  // Serial.print(F(","));
+  // Serial.print(data.day);
+  // Serial.print(F(","));
+  Serial.print(data.gmtHour);
+  Serial.print(F(","));
+  Serial.print(data.gmtMin);
+  Serial.print(F(","));
+  Serial.print(data.gmtSec);
+  Serial.print(F(","));
+  Serial.print(data.latitude, 6);
+  Serial.print(F(","));
+  Serial.print(data.longitude, 6);
+  Serial.print(F(","));
+  Serial.print(data.gpsAltitude);
+  Serial.print(F(","));
+  // Serial.print(data.gpsHeading);
+  // Serial.print(F(","));
+  Serial.print(data.gpsSpeed);
+  Serial.print(F(","));
 
-  dataFile.print(data.extPressure);
-  dataFile.print(F(","));
-  dataFile.print(data.extAltitude);
-  dataFile.print(F(","));
-  dataFile.print(data.humidity);
-  dataFile.print(F(","));
-  dataFile.print(data.intTemp);
-  dataFile.print(F(","));
-  dataFile.print(data.extTemp);
-  dataFile.print(F(","));
-  dataFile.print(data.attitude[0]);
-  dataFile.print(F(","));
-  dataFile.print(data.attitude[1]);
-  dataFile.print(F(","));
-  dataFile.print(data.attitude[2]);
-  dataFile.print(F(","));
-  dataFile.print(data.attitudeRate[0]);
-  dataFile.print(F(","));
-  dataFile.print(data.attitudeRate[1]);
-  dataFile.print(F(","));
-  dataFile.print(data.attitudeRate[2]);
-  dataFile.print(F(","));
-  dataFile.print(data.acceleration[0]);
-  dataFile.print(F(","));
-  dataFile.print(data.acceleration[1]);
-  dataFile.print(F(","));
-  dataFile.print(data.acceleration[2]);
-  dataFile.print(F(","));
-  dataFile.print(data.batteryCurrent);
-  dataFile.print(F(","));
-  dataFile.println(data.batteryTemp);
+  Serial.print(data.extPressure);
+  Serial.print(F(","));
+  Serial.print(data.extAltitude);
+  Serial.print(F(","));
+  Serial.print(data.humidity);
+  Serial.print(F(","));
+  Serial.print(data.intTemp);
+  Serial.print(F(","));
+  Serial.print(data.extTemp);
+  Serial.print(F(","));
+  Serial.print(data.attitude[0]);
+  Serial.print(F(","));
+  Serial.print(data.attitude[1]);
+  Serial.print(F(","));
+  Serial.print(data.attitude[2]);
+  Serial.print(F(","));
+  Serial.print(data.attitudeRate[0]);
+  Serial.print(F(","));
+  Serial.print(data.attitudeRate[1]);
+  Serial.print(F(","));
+  Serial.print(data.attitudeRate[2]);
+  Serial.print(F(","));
+  Serial.print(data.acceleration[0]);
+  Serial.print(F(","));
+  Serial.print(data.acceleration[1]);
+  Serial.print(F(","));
+  Serial.print(data.acceleration[2]);
+  Serial.print(F(","));
+  Serial.print(data.batteryCurrent);
+  Serial.print(F(","));
+  Serial.println(data.batteryTemp);
   
-  dataFile.flush();
+  //dataFile.flush();
 
   // Serial.print(F("GPS fix: "));
   // Serial.println(data.gpsFix ? F("false") : F("true"));
@@ -176,7 +180,7 @@ void printSensorDataCSV(const SensorData& data) {
   // Serial.println(data.longitude);
 }
 
-void transmitMorseAlti(const SensorData& data, const SX127XLT& LT){
+void transmitMorseAlti(char* ch, const SX127XLT& LT){
   char* letters[] = {
 ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", // A-I
 ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", // J-R 
@@ -188,8 +192,6 @@ char* numbers[] = {
   "-----", ".----", "..---", "...--", "....-", ".....",
 "-....", "--...", "---..", "----."
 };
-
-  char* ch = 'ko6czn';
 
   int i = 0;
   while (ch[i] != NULL)
@@ -218,7 +220,7 @@ void flashSequence(char* sequence, const SX127XLT& LT) {
     flashDotOrDash(sequence[i], LT);
     i++; 
   }
-  delay(600);
+  delay(300);
 }
 
 
@@ -231,4 +233,5 @@ void flashDotOrDash(char dotOrDash, const SX127XLT& LT) {
   {
     LT.toneFM(1000, 300, deviation, adjustfreq, TXpower);
   }
+  delay(100);
 }
