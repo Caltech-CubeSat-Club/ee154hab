@@ -125,6 +125,7 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.print(F(","));
   dataFile.println(data.batteryTemp);
   dataFile.flush();
+  
   // Serial.print(F("GPS fix: "));
   // Serial.println(data.gpsFix ? F("false") : F("true"));
   Serial.print(F("lat: "));
