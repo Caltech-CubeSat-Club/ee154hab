@@ -13,7 +13,9 @@ int sampleNumber = 0;
 struct SensorData {
   unsigned long timestamp = 0;
   int sampleCount = 0;
-  //String date = "";
+  // int year = 0;    //Removing Y, M, D from sensors.h saves 4 bytes
+  // uint8_t month = 0;
+  // uint8_t day = 0;
   uint8_t gmtHour = 0;
   uint8_t gmtMin = 0;
   uint8_t gmtSec = 0;
@@ -117,8 +119,9 @@ void readBME280Data(SensorData& data) {
 /*    GPS FUNCTIONS     */
 /*    GPS FUNCTIONS     */
 void readGPSData(SensorData& data) {
-  //data.date = String(gps.date.year()) + String(gps.date.month()) + String(gps.date.day());
-  //data.gmtTime = String(gps.time.hour()) + String(gps.time.minute()) + String(gps.time.second());
+  // data.year = gps.date.year();
+  // data.month = gps.date.month();
+  // data.day = gps.date.day();
   data.gmtHour = gps.time.hour();
   data.gmtMin = gps.time.minute();
   data.gmtSec = gps.time.second();

@@ -100,7 +100,11 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.print(data.sampleCount);
   dataFile.print(F(","));
 
-  // dataFile.print(data.date);
+  // dataFile.print(data.year);   //Removing date saves ~200 bytes
+  // dataFile.print(F(","));      //Because the mission is < 2 hours, no date needed
+  // dataFile.print(data.month);
+  // dataFile.print(F(","));
+  // dataFile.print(data.day);
   // dataFile.print(F(","));
   dataFile.print(data.gmtHour);
   dataFile.print(F(","));
