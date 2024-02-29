@@ -30,7 +30,7 @@ Uses 30994 bytes of storage space (of 32256!!)
 #include "Settings.h"                                          //include the setiings file, frequencies, LoRa settings etc   
 
 SdFat SD;
-SX127XLT LT;
+//SX127XLT LT;
 
 void setup() {
   pinMode(2,OUTPUT); // Error Indicator light
@@ -58,22 +58,22 @@ void setup() {
   if (!dataFile) handleErrors(200);
 
   //setup hardware pins used by device, then check if device is found
-  if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
-  {
-    //Serial.println(F("LoRa Device found"));
-    led_Flash(3, 2, 125);                                   //two further quick LED flashes to indicate device found
-    //delay(1000);
-  }
-  else
-  {
-    Serial.println(F("No device responding"));
-    while (1)
-    {
-      led_Flash(3, 50, 50);                                 //long fast speed LED flash indicates device error
-    }
-  }
+  // if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
+  // {
+  //   //Serial.println(F("LoRa Device found"));
+  //   led_Flash(3, 2, 125);                                   //two further quick LED flashes to indicate device found
+  //   //delay(1000);
+  // }
+  // else
+  // {
+  //   Serial.println(F("No device responding"));
+  //   while (1)
+  //   {
+  //     led_Flash(3, 50, 50);                                 //long fast speed LED flash indicates device error
+  //   }
+  // }
   
-  LT.setupDirect(Frequency, Offset);
+  // LT.setupDirect(Frequency, Offset);
     
   // Serial.print(F("Tone Transmitter ready"));
   // Serial.println();
@@ -90,11 +90,12 @@ void loop() {
   
   
   if (data.sampleCount % 3 ==0) {
-    Serial.println((int)data.extAltitude);
-    digitalWrite(3, HIGH);
-    flashSequence('ko6czn', LT);
-    flashSequence(((int)data.extAltitude), LT);
-    digitalWrite(3, LOW);
+    // String alt = String((int)data.extAltitude);
+    // Serial.println(alt);
+    //digitalWrite(3, HIGH);
+    transmitMorse("ko6czn ");//, LT);
+    //transmitMorse(alt);//, LT);
+    //digitalWrite(3, LOW);
   }
 }
 
@@ -180,7 +181,7 @@ void printSensorDataCSV(const SensorData& data) {
   // Serial.println(data.longitude);
 }
 
-void transmitMorseAlti(char* ch, const SX127XLT& LT){
+void transmitMorse(String ch){//;, const SX127XLT& LT){
   char* letters[] = {
 ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", // A-I
 ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", // J-R 
@@ -192,20 +193,20 @@ char* numbers[] = {
   "-----", ".----", "..---", "...--", "....-", ".....",
 "-....", "--...", "---..", "----."
 };
-
+  Serial.println(ch);
   int i = 0;
   while (ch[i] != NULL)
   {
     //ch = Serial.read(); // read a single letter if (ch >= 'a' && ch <= 'z')
     if (ch[i] >= 'a' && ch[i] <= 'z')
     {
-      flashSequence(letters[ch[i] - 'a'], LT);
+      flashSequence(letters[ch[i] - 'a']);//, LT);
     }
     else if (ch[i] >= 'A' && ch[i] <= 'Z') {
-      flashSequence(letters[ch[i] - 'A'], LT); 
+      flashSequence(letters[ch[i] - 'A']);//, LT); 
     }
     else if (ch[i] >= '0' && ch[i] <= '9') {
-      flashSequence(numbers[ch[i] - '0'], LT); 
+      flashSequence(numbers[ch[i] - '0']);//, LT); 
     }
     else if (ch[i] == ' ') {
       delay(400);
@@ -214,24 +215,26 @@ char* numbers[] = {
   }
 }
 
-void flashSequence(char* sequence, const SX127XLT& LT) {
+void flashSequence(char* sequence){//, const SX127XLT& LT) {
   int i = 0;
   while (sequence[i] != NULL) {
-    flashDotOrDash(sequence[i], LT);
+    flashDotOrDash(sequence[i]);//, LT);
     i++; 
   }
   delay(300);
 }
 
 
-void flashDotOrDash(char dotOrDash, const SX127XLT& LT) {
+void flashDotOrDash(char dotOrDash){//, const SX127XLT& LT) {
   if (dotOrDash == '.')
   {
-    LT.toneFM(1000, 100, deviation, adjustfreq, TXpower);
+    led_Flash(3, 1, 100);
+    //LT.toneFM(1000, 100, deviation, adjustfreq, TXpower);
   }
   else // must be a - 
   {
-    LT.toneFM(1000, 300, deviation, adjustfreq, TXpower);
+    led_Flash(3, 1, 300);
+    //LT.toneFM(1000, 300, deviation, adjustfreq, TXpower);
   }
   delay(100);
 }
