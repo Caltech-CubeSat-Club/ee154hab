@@ -60,17 +60,17 @@ void setup() {
   //setup hardware pins used by device, then check if device is found
   if (LT.begin(NSS, RFBUSY, DIO1, LORA_DEVICE))
   {
-    // Serial.println(F("LoRa Device found"));
-    //led_Flash(2, 125);                                   //two further quick LED flashes to indicate device found
+    //Serial.println(F("LoRa Device found"));
+    led_Flash(2, 125);                                   //two further quick LED flashes to indicate device found
     //delay(1000);
   }
   else
   {
     Serial.println(F("No device responding"));
-    // while (1)
-    // {
-    //   //led_Flash(50, 50);                                 //long fast speed LED flash indicates device error
-    // }
+    while (1)
+    {
+      led_Flash(50, 50);                                 //long fast speed LED flash indicates device error
+    }
   }
   
   LT.setupDirect(Frequency, Offset);
@@ -85,14 +85,25 @@ void loop() {
   SensorData data = measureAllSensors();
   printSensorDataCSV(data);
 
-  //Serial.println("Playing tone");
-  digitalWrite(3, HIGH);
-  LT.toneFM(1000, 1000, deviation, adjustfreq, TXpower);
-  digitalWrite(3, LOW);
-  // txCallSign();
+  if data.sampleCount % 1 == 0 {
+    digitalWrite(3, HIGH);
+    flashSequence('ko6czn');
+    flashSequence(data.extAltitude, 0)
+    digitalWrite(3, LOW);
+  }
 }
 
-
+void led_Flash(uint16_t flashes, uint16_t delaymS)
+{
+  uint16_t index;
+  for (index = 1; index <= flashes; index++)
+  {
+    digitalWrite(LED1, HIGH);
+    delay(delaymS);
+    digitalWrite(LED1, LOW);
+    delay(delaymS);
+  }
+}
 
 void printSensorDataCSV(const SensorData& data) {
   dataFile.print(data.timestamp);
@@ -154,11 +165,37 @@ void printSensorDataCSV(const SensorData& data) {
   dataFile.print(data.batteryCurrent);
   dataFile.print(F(","));
   dataFile.println(data.batteryTemp);
+  
   dataFile.flush();
+
   // Serial.print(F("GPS fix: "));
   // Serial.println(data.gpsFix ? F("false") : F("true"));
   // Serial.print(F("lat: "));
   // Serial.println(data.latitude);
   // Serial.print(F("lon: "));
   // Serial.println(data.longitude);
+}
+
+void flashSequence(char* sequence, const SX127XLT& LT) {
+  int i = 0;
+  while (sequence[i] != NULL) {
+    flashDotOrDash(sequence[i]);
+    i++; 
+  }
+  delay(dotDelay * 3);
+}
+
+
+void flashDotOrDash(char dotOrDash, const SX127XLT& LT) {
+  onTime = 0;
+  
+  if (dotOrDash == '.')
+  {
+    onTime = 200;
+  }
+  else // must be a - 
+  {
+    onTime = 600;
+  }
+  LT.toneFM(1000, onTime, deviation, adjustfreq, TXpower);
 }
