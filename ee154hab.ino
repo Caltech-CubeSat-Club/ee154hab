@@ -54,7 +54,8 @@ void setup() {
   errorCode += SD.begin(10) ? 0 : 100;
   Serial.println(errorCode);
   handleErrors(errorCode);
-  dataFile = SD.open("OZ3Rad.csv", FILE_WRITE);
+  dataFile = SD.open("OZ3FLT.csv", FILE_WRITE);
+  Serial.println(SD.exists("OZ3FLT.csv"));
   if (!dataFile) handleErrors(200);
 
   //setup hardware pins used by device, then check if device is found
@@ -146,71 +147,71 @@ void led_Flash(uint8_t led, uint16_t flashes, uint16_t delaymS) {
 }
 
 void printSensorDataCSV(const SensorData& data) {
-  Serial.print(data.timestamp);
-  Serial.print(F(","));
-  Serial.print(data.sampleCount);
-  Serial.print(F(","));
+  dataFile.print(data.timestamp);
+  dataFile.print(F(","));
+  dataFile.print(data.sampleCount);
+  dataFile.print(F(","));
 
-  // Serial.print(data.year);   //Removing date saves ~200 bytes
-  // Serial.print(F(","));      //Because the mission is < 2 hours, no date needed
-  // Serial.print(data.month);
-  // Serial.print(F(","));
-  // Serial.print(data.day);
-  // Serial.print(F(","));
-  Serial.print(data.gmtHour);
-  Serial.print(F(","));
-  Serial.print(data.gmtMin);
-  Serial.print(F(","));
-  Serial.print(data.gmtSec);
-  Serial.print(F(","));
-  Serial.print(data.latitude, 6);
-  Serial.print(F(","));
-  Serial.print(data.longitude, 6);
-  Serial.print(F(","));
-  Serial.print(data.gpsAltitude);
-  Serial.print(F(","));
-  // Serial.print(data.gpsHeading);
-  // Serial.print(F(","));
-  Serial.print(data.gpsSpeed);
-  Serial.print(F(","));
+  // dataFile.print(data.year);   //Removing date saves ~200 bytes
+  // dataFile.print(F(","));      //Because the mission is < 2 hours, no date needed
+  // dataFile.print(data.month);
+  // dataFile.print(F(","));
+  // dataFile.print(data.day);
+  // dataFile.print(F(","));
+  dataFile.print(data.gmtHour);
+  dataFile.print(F(","));
+  dataFile.print(data.gmtMin);
+  dataFile.print(F(","));
+  dataFile.print(data.gmtSec);
+  dataFile.print(F(","));
+  dataFile.print(data.latitude, 6);
+  dataFile.print(F(","));
+  dataFile.print(data.longitude, 6);
+  dataFile.print(F(","));
+  dataFile.print(data.gpsAltitude);
+  dataFile.print(F(","));
+  // dataFile.print(data.gpsHeading);
+  // dataFile.print(F(","));
+  dataFile.print(data.gpsSpeed);
+  dataFile.print(F(","));
 
-  Serial.print(data.extPressure);
-  Serial.print(F(","));
-  Serial.print(data.extAltitude);
-  Serial.print(F(","));
-  Serial.print(data.humidity);
-  Serial.print(F(","));
-  Serial.print(data.intTemp);
-  Serial.print(F(","));
-  Serial.print(data.extTemp);
-  Serial.print(F(","));
-  Serial.print(data.attitude[0]);
-  Serial.print(F(","));
-  Serial.print(data.attitude[1]);
-  Serial.print(F(","));
-  Serial.print(data.attitude[2]);
-  Serial.print(F(","));
-  Serial.print(data.attitudeRate[0]);
-  Serial.print(F(","));
-  Serial.print(data.attitudeRate[1]);
-  Serial.print(F(","));
-  Serial.print(data.attitudeRate[2]);
-  Serial.print(F(","));
-  Serial.print(data.acceleration[0]);
-  Serial.print(F(","));
-  Serial.print(data.acceleration[1]);
-  Serial.print(F(","));
-  Serial.print(data.acceleration[2]);
-  Serial.print(F(","));
-  Serial.print(data.batteryCurrent);
-  Serial.print(F(","));
-  Serial.println(data.batteryTemp);
+  dataFile.print(data.extPressure);
+  dataFile.print(F(","));
+  dataFile.print(data.extAltitude);
+  dataFile.print(F(","));
+  dataFile.print(data.humidity);
+  dataFile.print(F(","));
+  dataFile.print(data.intTemp);
+  dataFile.print(F(","));
+  dataFile.print(data.extTemp);
+  dataFile.print(F(","));
+  dataFile.print(data.attitude[0]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitude[1]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitude[2]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitudeRate[0]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitudeRate[1]);
+  dataFile.print(F(","));
+  dataFile.print(data.attitudeRate[2]);
+  dataFile.print(F(","));
+  dataFile.print(data.acceleration[0]);
+  dataFile.print(F(","));
+  dataFile.print(data.acceleration[1]);
+  dataFile.print(F(","));
+  dataFile.print(data.acceleration[2]);
+  dataFile.print(F(","));
+  dataFile.print(data.batteryCurrent);
+  dataFile.print(F(","));
+  dataFile.println(data.batteryTemp);
   
-  //dataFile.flush();
+  dataFile.flush();
 
   // Serial.print(F("GPS fix: "));
   // Serial.println(data.gpsFix ? F("false") : F("true"));
-  // Serial.print(F("lat: "));
+  Serial.println(data.timestamp);
   // Serial.println(data.latitude);
   // Serial.print(F("lon: "));
   // Serial.println(data.longitude);
